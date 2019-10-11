@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta name="format-detection" content="telephone=no">
+    <!--自动检测在网页中可能出现的电话号码-->
+    <meta name="description" content="搭么？易到搭车全面起航，期待您的加入！">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta content="yes" name=" apple-mobile-web-app-capable" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>幸运大转盘</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            text-decoration: none;
+            list-style: none;
+            outline: none;
+            border: 0;
+            text-align: center;
+        }
+        
+        body {
+            -webkit-text-size-adjust: none
+        }
+        
+        .clearfix {
+            *zoom: 1
+        }
+        
+        .clearfix:after {
+            display: block;
+            clear: both;
+            content: ".";
+            visibility: hidden;
+            height: 0px;
+            font-size: 0;
+        }
+        
+        .l {
+            float: left;
+        }
+        
+        .r {
+            float: right;
+        }
+        
+        #loading {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+        }
+        
+        #loading img {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            bottom: 0;
+            width: 100%;
+            width: 0.45rem;
+            -webkit-transform: translate(-50%, -50%);
+        }
+        
+        #wrap {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            overflow: auto;
+        }
+        
+        [v-cloak] {
+            display: none;
+        }
+        
+        #cover {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            min-height;
+            12.18rem;
+            width: 100%;
+            z-index: 2;
+            background: #000;
+            opacity: 0.6;
+        }
+        
+        #rule {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            bottom: 0;
+            width: 100%;
+            z-index: 3;
+            width: 7.43rem;
+            -webkit-transform: translate(-50%, -75%);
+        }
+        
+        #rule img {
+            width: 98%;
+            display: block;
+        }
+        
+        #rule img.close {
+            width: 1rem;
+            position: absolute;
+            right: -0.15rem;
+            top: -0.15em;
+        }
+        
+        .toastmsg {
+            position: fixed;
+            bottom: 35%;
+            left: 10%;
+            width: 80%;
+            height: 40px;
+            line-height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            z-index: 30;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        
+        .slide-up-fade-enter-active {
+            transition: all .3s ease;
+        }
+        
+        .slide-up-fade-leave-active {
+            transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        
+        .slide-up-fade-enter,
+        .slide-up-fade-leave-to {
+            transform: translateY(100px);
+            opacity: 0;
+        }
+        
+        .content {
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            height: 100%;
+            padding-top: 4.1rem;
+            box-sizing: border-box;
+            min-height: 12.18rem;
+        }
+        
+        .content .op {
+            width: 100%;
+            /* background: url('//i3.yongche.name/media/g1/M04/1F/04/rBEAQ1re3feIUXFIAAAM2LEQHG8AAML5AHROOkAAAzw875.png') no-repeat; */
+            background-size: 100%;
+            color: #f9dc91;
+            font-size: 0.32rem;
+            line-height: 0.53rem;
+            margin: 0 auto;
+            position: relative;
+            top: 7.2rem;
+        }
+        
+        .content .op span {
+            color: #fff;
+        }
+        
+        .content .circle {
+            width: 7.4rem;
+            height: 7rem;
+            /*background: url("//i2.yongche.name/media/g4/M05/03/38/rBEDBVvaaemILRIIAADgynQZDSEAABhIgPNZ6MAAODi746.jpg") no-repeat;*/
+            background-size: 100% 100%;
+            overflow: hidden;
+            /* margin-top: 4.38rem; */
+            margin-left: 0.06rem;
+            position: relative;
+        }
+        
+        .content .circle img {
+            width: 100%;
+            display: block;
+            -webkit-transform: rotate(0deg);
+            -webkit-transition: 5s ease-out;
+        }
+        
+        .content .circle img.c {
+            width: 6.83rem;
+            margin: 0 auto;
+            /* margin-top: 0.46rem; */
+            /* margin-left: 0.4rem; */
+            position: relative;
+            -webkit-transition: 5s ease-out;
+            -webkit-transform: rotate(0deg);
+        }
+        
+        .content .circle img.b {
+            width: 2.15rem;
+            height: 2.55rem;
+            position: absolute;
+            left: 50%;
+            top: 1.9rem;
+            -webkit-transform: translateX(-50%);
+            position: absolute;
+        }
+        
+        .content .btn {
+            width: 7.05rem;
+            margin: 0 auto;
+            margin-top: 0.5rem;
+        }
+        
+        .content .btn p {
+            width: 2.74rem;
+            line-height: 0.72rem;
+            background: url('//i3.yongche.name/media/g1/M04/1F/04/rBEARFre3iGID1ZdAAAnKhwOvfEAAML5ANw5pEAACdC341.png') no-repeat;
+            background-size: 100%;
+            color: #ed4e49;
+            font-size: 0.26rem;
+        }
+        
+        .content .btn2 p {
+            background: none;
+            color: #f6d172;
+        }
+        
+        .content .f {
+            margin-top: 0.2rem;
+            color: #fff;
+            font-size: 0.18rem;
+            width: 100%;
+        }
+        
+        .contentRule {
+            width: 100%;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            height: 100%;
+            padding-top: 1.38rem;
+            box-sizing: border-box;
+            min-height: 12.18rem;
+        }
+        
+        .contentRule p.title {
+            font-size: 0.24rem;
+            color: #fff;
+            width: 100%;
+            line-height: 0.44rem;
+        }
+        
+        .contentRule p.count {
+            color: #f9dc91;
+            margin-top: 0.25rem;
+            font-size: 0.2rem;
+        }
+        
+        .contentRule p.count span {
+            color: #ee402f;
+        }
+        
+        .contentRule .btn {
+            width: 5rem;
+            margin: 0 auto;
+            margin-top: 0.43rem;
+        }
+        
+        .contentRule .btn p {
+            background: url('//i2.yongche.name/media/g1/M02/1F/04/rBEAQ1re6G2IGDOaAAAJAGS8GU8AAML6wMPDu8AAAkY452.png') no-repeat;
+            background-size: 100%;
+            width: 1.66rem;
+            line-height: 0.41rem;
+            font-size: 0.24rem;
+            color: #f9dc91;
+        }
+        
+        .contentRule .noContent {
+            margin-top: 1.88rem;
+            line-height: 0.5rem;
+            color: #bfe0ff;
+            font-size: 0.3rem;
+            font-weight: 400;
+            opacity: 0.5;
+        }
+        
+        .contentRule .list {
+            margin: 0 auto;
+            margin-top: 0.15rem;
+            width: 5.26rem;
+            height: 7rem;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch
+        }
+        
+        .contentRule .list .li {
+            width: 100%;
+            background: url('//i3.yongche.name/media/g1/M01/1F/04/rBEAQ1re-CeIbHxWAABBwKPQPsAAAML-gNThMYAAEHY652.png') no-repeat;
+            background-size: 100%;
+            height: 0.65rem;
+            margin-bottom: 0.05rem;
+        }
+        
+        .contentRule .list .li p.name {
+            display: -webkit-flex;
+            -webkit-justify-content: center;
+            -webkit-align-items: center;
+            font-size: 0.24rem;
+            color: #183958;
+            padding-left: 0.85rem;
+            box-sizing: border-box;
+            height: 100%;
+            line-height: 0.3rem;
+        }
+        
+        .contentRule .list .li p.name.s {
+            line-height: 0.33rem;
+        }
+        
+        .contentRule .list .li p.award {
+            line-height: 0.65rem;
+            font-size: 0.24rem;
+            color: #d1594b;
+            padding-right: 0.7rem;
+            box-sizing: border-box;
+        }
+        
+        #cover2 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            min-height: 12.18rem;
+            width: 100%;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 4;
+        }
+        
+        #cover2 .awardImg {
+            position: absolute;
+            left: 50%;
+            top: 1.3rem;
+            bottom: 0;
+            width: 100%;
+            width: 6.94rem;
+            -webkit-transform: translateX(-50%);
+            height: 8.42rem;
+        }
+        
+        #cover2 .awardImg img {
+            width: 100%;
+        }
+        
+        #cover2 .awardImg p {
+            width: 3.45rem;
+            height: 0.72rem;
+            position: absolute;
+            top: 7rem;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+        }
+        
+        #cover2 .awardImg p.noBegin {
+            top: 6.5rem;
+        }
+        
+        .line {
+            line-height: 0.32rem !important;
+        }
+        
+        @media screen and (max-device-height:736px) {
+            .content {
+                background-image: url('//i2.yongche.name/media/g4/M03/00/18/rBEDBV2J782Ia2cyAAL5kcW6mn8AACcWgKKSNEAAvmp410.png');
+            }
+            .content.over {
+                background-image: url('//i3.yongche.name/media/g2/M04/1E/0B/rBEBJVre_eGIEFGmAAF67E0aDIUAALvbQC3kFEAAXsE835.jpg');
+                padding-top: 11.4rem;
+            }
+            .content.over .btn {
+                margin-top: 0;
+            }
+            .contentRule {
+                background-image: url('//i2.yongche.name/media/g2/M04/1E/0B/rBEBJVre-A6IXdD_AAFrWNLs8h0AALvaQGFkEAAAWtw045.jpg');
+            }
+        }
+        
+        @media screen and (min-device-height:737px) {
+            .content {
+                background-image: url('//i3.yongche.name/media/g2/M03/1E/0D/rBEBJVrhTgaIWll9AAIgfXXLbOQAALwUQO3tA4AAiCV943.jpg');
+                padding-top: 6.4rem;
+            }
+            .content.over {
+                background-image: url('//i3.yongche.name/media/g2/M03/1E/0D/rBEBJVrhTiWIadNyAALSqhLO27YAALwVACddY8AAtLC928.jpg');
+                padding-top: 13.9rem;
+            }
+            .content .circle {
+                width: 4.8rem;
+                margin-left: auto;
+            }
+            .content .circle img.b {
+                top: 1rem;
+            }
+            .content .btn {
+                margin-top: 0.5rem;
+            }
+            .content.over .btn {
+                margin-top: 0;
+            }
+            .contentRule {
+                background-image: url('//i3.yongche.name/media/g2/M04/1E/0D/rBEBP1rhThSIbaTKAAFRTZYbC6YAALwUANS_2oAAVFl641.jpg');
+                padding-top: 2.65rem;
+            }
+            .contentRule .list {
+                margin-top: 0.3rem;
+                height: 6.99rem;
+            }
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/3.0.1/vue-router.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        document.getElementsByTagName('html')[0].style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';
+    </script>
+</head>
+
+<body>
+    <div id="loading"><img src="//i1.yongche.name/media/g1/M04/1F/04/rBEARFrfAWyIZnReAAAG-2B8lnYAAML8AP_-K8AAAdR727.gif"></div>
+    <div id="wrap" v-cloak>
+        <router-view></router-view>
+    </div>
+    <template id="index">
+	<div class="content" :class="{over:over}">
+		<div id="cover" @click="appear=false;rule=false" v-if="appear"></div>
+		<div id="rule" v-if="rule">
+			<img src="//i1.yongche.name/media/g2/M04/1E/0F/rBEBP1riqqKIUmhoAAAi3BcWmT0AALw5AM8tsMAACL0274.png" class="close" @click="appear=false;rule=false">
+			<img src="//i1.yongche.name/media/g4/M03/00/19/rBEDBV2NemaIapsxAADQX30gICMAACcogGUFpkAANB3660.png" class="ruleCon">
+		</div>
+		<transition name="slide-up-fade">
+			<div class="toastmsg" v-show="showToast" v-html="toastMsg"></div>
+		</transition>
+		<div v-if="!over">
+			<div id="cover2" v-if="showAward">
+				<div class="awardImg">
+					<p class="know" @click="showAward=false" :class="{noBegin:noBegin}"></p>
+					<img :src="award">
+				</div>
+			</div>
+			<div class="op">剩余<span>{{count}}</span> 次抽奖机会</div>
+			<div class="circle">
+				<img src="//i1.yongche.name/media/g3/M03/06/11/rBEDAl2NfvCISkDZAAFEKNnZk_0AACcowBLUfgAAURA635.png" class="c">
+				<img src="//i3.yongche.name/media/g3/M02/06/10/rBEDAl2J8S2IDbqrAAAfDvp_Y2YAACcWAMlWrMAAB8m491.png" class="b" v-if="count" @click="run()">
+				<img src="//i3.yongche.name/media/g3/M02/06/10/rBEDAl2J8S2IDbqrAAAfDvp_Y2YAACcWAMlWrMAAB8m491.png" class="b" v-if="!count">
+			</div>
+			<div class="btn clearfix">
+				<p class="l" @click="jump()">我的奖品</p>
+				<p class="r" @click="appear=true;rule=true">活动规则</p>
+			</div>
+			<p class="f">注：每完成一笔订单即可获得一次抽奖机会</p>
+		</div>
+		<div v-if="over">
+			<div class="btn btn2 clearfix">
+				<p class="l" @click="jump()">我的奖品</p>
+				<p class="r" @click="appear=true;rule=true">活动规则</p>
+			</div>
+		</div>
+	</div>
+</template>
+    <template id="ruleT">
+	<div class="contentRule">
+		<p class="title">我的奖品</p>
+		<div v-if="data.length">
+			<p class="count">共抽奖次数<span>{{data.length}}</span>次</p>
+			<div class="btn clearfix">
+				<p class="l">获奖奖项</p>
+				<p class="r">奖励明细</p>
+			</div>
+			<div class="list">
+				<div class="li" v-for="item in data">
+					<p class="l name" v-html="arr[item.award_type].name" :class="{line:arr[item.award_type].need}"></p>
+					<p class="r award">{{arr[item.award_type].award}}</p>
+				</div>
+			</div>
+		</div>
+		<div class="noContent" v-if="!data.length">您还没有获得奖品<br>每完成1笔订单即可获得1次抽奖机会<br>赶快接单吧！</div>
+	</div>
+</template>
+</body>
+<script>
+    var index = {
+        path: '/index',
+        name: 'index',
+        component: {
+            template: '#index',
+            data: function() {
+                return {
+                    url: 'https://testing-market.yongche.org/', //登录域名
+                    // url: 'https://market.yongChe.com/', //登录域名
+                    count: 0, //机会
+                    appear: false, //弹层
+                    rule: false, //规则
+                    over: false, //结束
+                    showAward: false, //展示奖励
+                    showToast: false, //提示开关
+                    toastMsg: '', //提示语
+                    isRun: false, //转动中
+                    num: 1, //次数
+                    rag: 0, //度数
+                    noBegin: false, //没有开始
+                    award: '//i2.yongche.name/media/g1/M03/1F/05/rBEARFrfBXqII9nIAADa3dsW9aMAAMMAwCzDQIAANr1767.png',
+                    awardList: [], //奖品列表
+                    arr: [{}, {
+                        id: 1,
+                        pos: 0,
+                        name: '500参与积分~',
+                        src: '//i3.yongche.name/media/g4/M01/00/14/rBEDBF117CGIT0jqAAB-FKoYHMYAACa6ABqD0wAAH4s200.png'
+                    }, {
+                        id: 2,
+                        pos: 72,
+                        name: '精美茶具~',
+                        src: '//i2.yongche.name/media/g4/M01/00/14/rBEDBF117CGIbTqyAACH4bshkJcAACa6ABvQaoAAIf5805.png'
+                    }, {
+                        id: 3,
+                        pos: 144,
+                        name: '高端偏光镜',
+                        src: '//i1.yongche.name/media/g4/M01/00/14/rBEDBV117CCIVNh-AACKbILVdnsAACa6ABphMgAAIqE142.png'
+                    }, {
+                        id: 4,
+                        pos: 216,
+                        name: '1000元加油卡',
+                        src: '//i3.yongche.name/media/g4/M01/00/14/rBEDBF117CGIfC6EAACFCLiB_M4AACa6ABo_6gAAIUg865.png'
+                    }, {
+                        id: 5,
+                        pos: 288,
+                        name: 'iphone11',
+                        src: '//i3.yongche.name/media/g4/M01/00/14/rBEDBF117CGIFUqOAACGhakeSvcAACa6ABqjXgAAIad439.png'
+                    }, ]
+                }
+            },
+            mounted: function() {
+                this.checkLogin();
+            },
+            methods: {
+                run: function() {
+                    if (this.isRun) return;
+                    this.isRun = true;
+                    $('#loading').show();
+                    var _this = this;
+                    $.ajax({
+                        type: "get",
+                        url: this.url + "miscellaneous/activitydrivermay/getResult",
+                        dataType: 'jsonp',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function(data) {
+                            if (data.code == 200) {
+                                _this.count = data.result.raffle_num;
+                                _this.awardList.push({
+                                    id: '-',
+                                    award_type: data.result.award_type,
+                                    remark: data.result.remark
+                                });
+                                _this.awardItem(data.result.award_type, true);
+                            } else {
+                                _this.showToastFn('系统异常');
+                            }
+                        },
+                        error: function(err) {
+                            _this.showToastFn(err.msg);
+                        }
+                    });
+                },
+                jump: function() {
+                    if (this.isRun) return;
+                    this.$router.push({ //跳转
+                        name: 'rule',
+                        params: {
+                            data: this.awardList
+                        }
+                    });
+                },
+                checkLogin: function() { //获取登录状态
+                    $('#loading').show();
+                    var _this = this;
+                    $.ajax({
+                        type: "get",
+                        url: this.url + "miscellaneous/activityDrivermay/getCommon",
+                        dataType: 'jsonp',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function(data) {
+                            if (data.code != 205) $('#loading').hide();
+                            switch (data.code) {
+                                case 200: //success
+                                    _this.count = data.result.raffle_num;
+                                    _this.awardList = data.result.award_list;
+                                    break;
+                                case 201: //不是易到司机
+                                    _this.showToastFn('您还不是易到司机');
+                                    break;
+                                case 203: //未登录
+                                    window.location.href = "yidaodriver://login?done=" + encodeURIComponent(window.location.href + "?t=" + new Date().getTime());
+                                    break;
+                                case 204: //未获取到司机信息
+                                    _this.showToastFn('未获取到司机信息');
+                                    break;
+                                case 205: //不在活动时间内
+                                    if (data.time < 1524931200) { //尚未开始
+                                        _this.awardItem(12);
+                                        _this.noBegin = true;
+                                    } else if (data.time >= 1525190400) { //活动结束
+                                        _this.awardList = data.award_list;
+                                        _this.over = true;
+                                        $('#loading').hide();
+                                    }
+                                    break;
+                                case 202: //no chance
+                                    _this.showToastFn('已经没有机会了');
+                                    break;
+                                default:
+                                    _this.showToastFn('系统繁忙请重试');
+                                    break;
+                            }
+                        },
+                        error: function(err) {
+                            _this.showToastFn(err.msg);
+                        }
+                    });
+                },
+                awardItem: function(index, bool) {
+                    var data = this.arr[index];
+                    var i = new Image();
+                    var _this = this;
+                    i.src = data.src;
+                    i.onload = function() {
+                        $('#loading').hide();
+                        _this.award = data.src;
+                        if (bool) {
+                            _this.rag = 1800 * _this.num + data.pos;
+                            $('.circle .c').css('-webkit-transform', 'rotate(' + _this.rag + 'deg)');
+                            $('.circle .c').off().on('webkitTransitionEnd', function() {
+                                _this.showAward = true;
+                                _this.num++;
+                                _this.isRun = false;
+                            });
+                        } else {
+                            _this.showAward = true;
+                        }
+                    }
+                },
+                showToastFn: function(msg) {
+                    var _this = this;
+                    this.showToast = true;
+                    this.toastMsg = msg;
+                    setTimeout(function() {
+                        _this.showToast = false;
+                    }, 2000)
+                },
+            }
+        }
+    };
+    var rule = {
+            path: '/rule/:data',
+            name: 'rule',
+            component: {
+                template: '#ruleT',
+                data: function() {
+                    return {
+                        data: [],
+                        arr: [{}, {
+                            'name': '参与分奖励',
+                            award: '500分'
+                        }, {
+                            'name': '精美茶具',
+                            award: '一套'
+                        }, {
+                            'name': '高端偏光镜',
+                            award: '一个'
+                        }, {
+                            'name': '1000元加油卡',
+                            award: '0.5元'
+                        }, {
+                            'name': 'iphone11',
+                            award: '一台'
+                        }]
+                    }
+                },
+                mounted: function() {
+                    this.data = this.$route.params.data;
+                }
+            }
+        }
+        // var routes = [index, rule];
+    var routes = [index, rule, {
+        path: '/',
+        redirect: '/index'
+    }];
+    new Vue({
+        el: '#wrap',
+        router: new VueRouter({
+            routes: routes
+        }),
+    });
+</script>
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-18761483-4', 'auto');
+    ga('send', 'pageview');
+</script>
+
+</html>
+<!-- render: data/page/51active.html at 2019-09-26 14:34:28 by 5091 -->
